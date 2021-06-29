@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import ProductClass from "./routes/product";
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
+import  LoginClass from "./routes/login";
+
 
 const app = express();
 
@@ -20,8 +22,12 @@ app.get('/', (req: express.Request, res: express.Response) => {
 })
 
 app.use('/', new ProductClass().router)
+app.use('/', new LoginClass().router)
 
-const db = 'mongodb+srv://Rajeswari:raje1992@cluster0.vznru.mongodb.net/Data'
+
+//const db = 'mongodb+srv://Rajeswari:raje1992@cluster0.cf3cw.mongodb.net/Data'
+const db = 'mongodb+srv://Rajeswari:raje1992@cluster0.vznru.mongodb.net/login'
+
 
 
 mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true, }).then(() => {
