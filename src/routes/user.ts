@@ -1,8 +1,8 @@
-import { User } from './../model/login.model';
 import mongoose from "mongoose";
 import express from "express"
 import UserService from "../controller/user";
 import bcrypt, { hash } from "bcrypt"
+import { User } from "../model/login.model";
 
 
 
@@ -11,31 +11,16 @@ class UserClass{
     protected service : UserService
     public saltRounds = 10;
     public myPlaintextPassword = 's0/\/\P4$$w0rD';
+    userService: any;
  
 
     constructor(){
-        this.router.post("/signup", this.signup);
-        this.router.delete("/UserId", this.UserId);
+        this.router.post('/signup', this.signup);
+        this.router.delete('/UserId/:id', this.UserId);
         this.service = new UserService()
     }
-    private UserId = async (req: express.Request, res: express.Response) => {
-        User.remove({_id: req.params.UserId}) 
-        .exec()
-        .then((result: any) => {
-            res.status(200).json({
-                message:'User deleted'
-            });
-        })
-        .catch((err: any) => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-
-
-        });
-    }
-
+    
+    
     private signup = async (req: express.Request, res: express.Response) => {
         User.find({emailId: req.body.emailId })
         .exec()
@@ -77,12 +62,21 @@ class UserClass{
                         });
                     });
             }
+            
         });
     }
-                
             
         })
     }
-}
+
+    private UserId = async (req: express.Request, res: express.Response) => {
+
+        const result = await this.service.deleteUserId(req.params.id)
+        
+        res.json(result)
+    }
+    
+    }
 
 export default UserClass
+
